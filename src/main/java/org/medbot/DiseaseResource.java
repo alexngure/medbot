@@ -10,15 +10,15 @@ import javax.ws.rs.Produces;
 @RequestScoped
 @Path("/disease")
 public class DiseaseResource {
-	@GET()
-	@Produces("application/json")
-	public HashMap<String, String> getInsult() {
-		HashMap<String, String> result = new HashMap<String, String>();
-		result.put("definition",
-				"Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit");
-		return result;
-	}
 	
+	// TODO: Add a method to return usage info if user doesn't provide params
+	
+	/**
+	 * Gets the given disease's information -- definition, symptoms, causes, side effects, etc.
+	 *
+	 * @param condition -- the disease name
+	 * @return a JSON tree with the info
+	 */
 	@GET()
 	@Path("{condition}")
 	@Produces("application/json")
@@ -29,6 +29,12 @@ public class DiseaseResource {
 		return result;
 	}
 	
+	/**
+	 * Gets the disease's definition.
+	 *
+	 * @param condition -- the disease name
+	 * @return a JSON tree with the definition
+	 */
 	@GET()
 	@Path("/definition/{condition}")
 	@Produces("application/json")
@@ -39,6 +45,12 @@ public class DiseaseResource {
 		return result;
 	}
 	
+	/**
+	 * Gets the disease's symptoms.
+	 *
+	 * @param condition -- the disease name
+	 * @return a JSON tree with the symptoms
+	 */
 	@GET()
 	@Path("/symptoms/{condition}")
 	@Produces("application/json")
@@ -49,6 +61,12 @@ public class DiseaseResource {
 		return result;
 	}
 	
+	/**
+	 * Gets the disease's cause.
+	 *
+	 * @param condition -- the disease name
+	 * @return a JSON tree with the cause info
+	 */
 	@GET()
 	@Path("/cause/{condition}")
 	@Produces("application/json")
