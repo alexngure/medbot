@@ -26,7 +26,7 @@ import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Filters;
 
 @RequestScoped
-@Path("/")
+@Path("/db")
 public class HealthDB {
 	private MongoClient mongo;
 	private MongoDatabase mongoDB;
@@ -36,7 +36,7 @@ public class HealthDB {
 		String password = System.getenv("MONGODB_PASSWORD");
 		String dbName = System.getenv("MONGODB_DATABASE");
 
-		String uriString = "mongodb://" + username + ":" + password + "@localhost/" + dbName;
+		String uriString = "mongodb://" + username + ":" + password + "@mongodb/" + dbName;
 		mongo = new MongoClient(new MongoClientURI(uriString));
 		mongoDB = mongo.getDatabase(dbName);
 		
@@ -49,6 +49,7 @@ public class HealthDB {
 	
 
 	@GET()
+	@Path("/test")
 	@Produces("application/json")
 	public HashMap<String, String> getDB() {
 		openDBSession();
