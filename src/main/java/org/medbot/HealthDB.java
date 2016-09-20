@@ -73,8 +73,11 @@ public class HealthDB {
 		String uriString = "mongodb://"+username+":"+password+"@mongodb/"+dbName;
 		MongoClient mongo = new MongoClient(new MongoClientURI(uriString));
 		MongoDatabase db = mongo.getDatabase(dbName);
-		
-		String names = db.listCollectionNames().toString();
+		String names = "1. ";
+		for(String name : db.listCollectionNames())
+		{
+			names += name;
+		}
 		
 		result.put("collections", names);
 		mongo.close();
