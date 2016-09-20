@@ -77,7 +77,7 @@ public class HealthDB {
 		result.put("unkown host", "failed");
 	}
 		
-		mongoDB = mongo.getDB(dbName);
+		mongoDB = mongo.getDB("admin");
 
 		if (mongoDB.authenticate(username, password.toCharArray()) == false) {
 			result.put("failed!", ":(");
