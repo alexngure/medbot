@@ -25,7 +25,7 @@ public class DiseaseResource {
 	public HashMap<String, String> getDisease(@PathParam("condition") String condition)
 	{
 		HashMap<String, String> result = new HashMap<String, String>();
-		
+		result.put("test", "test");
 		return result;
 	}
 	

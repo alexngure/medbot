@@ -20,8 +20,8 @@ public class HealthDB {
 		String username = System.getenv("MONGODB_USER");
 		String password = System.getenv("MONGODB_PASSWORD");
 		String dbName = System.getenv("MONGODB_DATABASE");
-		String host = System.getenv("MONGODB_HOST");
-		String port_string = System.getenv("MONGODB_PORT");
+		String host = "mongodb";//System.getenv("MONGODB_HOST");
+		String port_string = "27017";//System.getenv("MONGODB_PORT");
 		int port = Integer.decode(port_string);
 
 		try {

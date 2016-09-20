@@ -24,7 +24,7 @@ public class DrugResource{
 	public HashMap<String, String> getDrugInfo(@PathParam("drugname") String drugName)
 	{
 		HashMap<String, String> result = new HashMap<String, String>();
-		
+		result.put("test", "test"); // TODO: remove test 
 		return result;
 	}
 	
