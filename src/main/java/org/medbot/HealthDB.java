@@ -10,6 +10,8 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 
+import org.bson.Document;
+
 import com.mongodb.BasicDBObject;
 import com.mongodb.Mongo;
 import com.mongodb.MongoCredential;
@@ -18,7 +20,10 @@ import com.mongodb.DBCollection;
 import com.mongodb.DBCursor;
 import com.mongodb.MongoClient;
 import com.mongodb.MongoException;
+import com.mongodb.QueryBuilder;
+import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
+import com.mongodb.client.model.Filters;
 
 @RequestScoped
 @Path("/")
@@ -31,17 +36,30 @@ public class HealthDB {
 		String password = System.getenv("MONGODB_PASSWORD");
 		String dbName = System.getenv("MONGODB_DATABASE");
 
-		String uriString = "mongodb://" + username + ":" + password + "@mongodb/" + dbName;
+		String uriString = "mongodb://" + username + ":" + password + "@localhost/" + dbName;
 		mongo = new MongoClient(new MongoClientURI(uriString));
 		mongoDB = mongo.getDatabase(dbName);
+		
+	}
+	
+	public void closeDBSession()
+	{
+		mongo.close();
 	}
 	
 
 	@GET()
 	@Produces("application/json")
 	public HashMap<String, String> getDB() {
+		openDBSession();
 		HashMap<String, String> result = new HashMap<String, String>();
-		mongo.close();
+		
+		MongoCollection<Document> coll = mongoDB.getCollection("drugs");
+		
+		Document doc = (Document)coll.find(Filters.eq("betaxolol.exists", 1)).first();//"betaxolol"
+		result.put("response", doc.toJson());
+		result.put("test", "random val");
+		closeDBSession();
 		return result;
 	}
 	
