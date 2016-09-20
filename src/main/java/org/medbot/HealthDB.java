@@ -14,11 +14,13 @@ import java.util.HashMap;
 
 import com.mongodb.BasicDBObject;
 import com.mongodb.Mongo;
-import com.mongodb.DB;
+import com.mongodb.MongoCredential;
+import com.mongodb.MongoClientURI;
 import com.mongodb.DBCollection;
 import com.mongodb.DBCursor;
 import com.mongodb.MongoClient;
 import com.mongodb.MongoException;
+import com.mongodb.client.MongoDatabase;
 
 @RequestScoped
 @Path("/db")
@@ -54,8 +56,7 @@ public class HealthDB {
 	@Produces("application/json")
 	public HashMap<String, String> getDB()
 	{
-		Mongo mongo;
-		DB mongoDB;
+	
 		String username = System.getenv("MONGODB_USER");
 		String password = System.getenv("MONGODB_PASSWORD");
 		String dbName = System.getenv("MONGODB_DATABASE");
@@ -68,23 +69,15 @@ public class HealthDB {
 		result.put("password", password);
 		result.put("database", dbName);
 		
-		try {
-		mongo = new Mongo(host, port);
-	} catch (UnknownHostException e) {
 		
-		mongo = null;
-		//System.out.println("unknown host exception");
-		result.put("unkown host", "failed");
-	}
+		String uriString = "mongodb://"+username+":"+password+"@mongodb/"+dbName;
+		MongoClient mongo = new MongoClient(new MongoClientURI(uriString));
+		MongoDatabase db = mongo.getDatabase(dbName);
 		
-		mongoDB = mongo.getDB("admin");
-
-		if (mongoDB.authenticate(username, password.toCharArray()) == false) {
-			result.put("failed!", ":(");
-		} else {
-			result.put("win!", ":)");
-		}
+		String names = db.listCollectionNames().toString();
 		
+		result.put("collections", names);
+		mongo.close();
 		return result;
 	}
 	
