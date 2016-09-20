@@ -54,16 +54,37 @@ public class HealthDB {
 	@Produces("application/json")
 	public HashMap<String, String> getDB()
 	{
+		Mongo mongo;
+		DB mongoDB;
 		String username = System.getenv("MONGODB_USER");
 		String password = System.getenv("MONGODB_PASSWORD");
 		String dbName = System.getenv("MONGODB_DATABASE");
 		String host = "mongodb";//System.getenv("MONGODB_HOST");
 		String port_string = "27017";//System.getenv("MONGODB_PORT");
+		int port = 27017;
 		
 		HashMap<String, String> result = new HashMap<String, String>();
 		result.put("username", username);
 		result.put("password", password);
-		result.put("databse", dbName);
+		result.put("database", dbName);
+		
+		try {
+		mongo = new Mongo(host, port);
+	} catch (UnknownHostException e) {
+		
+		mongo = null;
+		//System.out.println("unknown host exception");
+		result.put("unkown host", "failed");
+	}
+		
+		mongoDB = mongo.getDB(dbName);
+
+		if (mongoDB.authenticate(username, password.toCharArray()) == false) {
+			result.put("failed!", ":(");
+		} else {
+			result.put("win!", ":)");
+		}
+		
 		return result;
 	}
 	
